@@ -6,8 +6,9 @@ export const StyledContactItem = styled.li`
   padding: 10px;
   display: flex;
   flex-wrap: wrap;
-  max-width: 700px;
+  flex-direction: column;
   justify-content: space-between;
+  max-width: 700px;
 `;
 export const StyledContactButton = styled.button`
   background-color: darkred;

@@ -6,6 +6,7 @@ export const StyledContactForm = styled.form`
   display: flex;
   flex-direction: column;
   padding: 40px 20px;
+  position: fixed;
 `;
 export const StyledContactlabel = styled.label`
   display: flex;

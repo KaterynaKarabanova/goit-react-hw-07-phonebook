@@ -1,39 +1,52 @@
 import { createSlice } from '@reduxjs/toolkit';
-import { persistReducer } from 'redux-persist';
-import storage from 'redux-persist/lib/storage';
-
+import { fetchTasks, addContacts, deleteContacts } from './operations';
 const initialState = {
   items: [],
+  isLoading: false,
+  error: null,
+};
+
+const handlePending = state => {
+  state.isLoading = true;
+};
+const handleRejected = (state, action) => {
+  state.isLoading = false;
+  state.error = action.payload;
 };
 
 const contactsSlice = createSlice({
   name: 'contacts',
   initialState,
-  reducers: {
-    addContact: {
-      reducer(state, action) {
-        state.items.push(action.payload);
-      },
+  extraReducers: {
+    [fetchTasks.pending]: handlePending,
+    [fetchTasks.fulfilled](state, action) {
+      state.isLoading = false;
+      state.error = null;
+      state.items = action.payload;
     },
-    deleteContact: {
-      reducer(state, action) {
-        const index = state.items.findIndex(task => task.id === action.payload);
-        state.items.splice(index, 1);
-      },
+    [fetchTasks.rejected]: handleRejected,
+    [addContacts.pending]: handlePending,
+    [addContacts.fulfilled](state, action) {
+      state.isLoading = false;
+      state.error = null;
+      state.items.push(action.payload);
     },
+    [addContacts.rejected]: handleRejected,
+    [deleteContacts.pending]: handlePending,
+    [deleteContacts.fulfilled](state, action) {
+      state.isLoading = false;
+      state.error = null;
+      const index = state.items.findIndex(
+        task => task.id === action.payload.id
+      );
+      state.items.splice(index, 1);
+    },
+    [deleteContacts.rejected]: handleRejected,
   },
 });
 
-// Експортуємо генератори екшенів та редюсер
 export const { addContact, deleteContact } = contactsSlice.actions;
-const persistConfig = {
-  key: 'contacts',
-  storage,
-};
-export const persistedReducer = persistReducer(
-  persistConfig,
-  contactsSlice.reducer
-);
-
+export const { fetchingInProgress, fetchingSuccess, fetchingError } =
+  contactsSlice.actions;
 export const contactsReducer = contactsSlice.reducer;
-export const getContactsItems = state => state.contacts.items;
+export const getContactsItems = state => state.contacts;
