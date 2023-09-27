@@ -1,6 +1,6 @@
 import { setStatusFilter } from 'redux/filterSlice';
 import { StyledFilterLabel, StyledFilterInput } from './Filter.styled';
-import PropTypes from 'prop-types';
+
 import { useDispatch } from 'react-redux';
 export const Filter = () => {
   const dispatch = useDispatch();
