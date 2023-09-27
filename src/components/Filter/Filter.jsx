@@ -21,6 +21,3 @@ export const Filter = () => {
     </StyledFilterLabel>
   );
 };
-Filter.propTypes = {
-  onChange: PropTypes.func,
-};
